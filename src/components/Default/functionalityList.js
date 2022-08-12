@@ -1,52 +1,40 @@
 /* eslint-disable react-native/no-inline-styles */
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {isTablet} from 'react-native-device-info';
+import {useDispatch, useSelector} from 'react-redux';
 import theme from '../../assets/theme';
+import {userSetting} from '../../redux/reducers/user/user.actions';
 import {heightToPixel as hp, widthToPixel as wp} from '../../utils/responsive';
 
-const FunctionalityList = ({listItem, label, componentkey}) => {
-  const [reload, setReload] = useState(false);
-  const [data, setData] = useState(listItem || []);
-
-  useEffect(() => {
-    AsyncStorage.getItem(`${componentkey}`)
-      .then(e => {
-        if (e) {
-          setData(JSON.parse(e));
-        }
-      })
-      .catch(err => console.log('@@@@@ error', err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+const FunctionalityList = ({label, componentkey}) => {
+  const dispatch = useDispatch();
+  const data = useSelector(state => state?.user[componentkey]);
 
   const moveUp = index => {
-    const duplicateArray = data;
+    let duplicateArray = [...data];
     duplicateArray.splice(index - 1, 0, duplicateArray.splice(index, 1)[0]);
-    setData(duplicateArray);
     saveData(duplicateArray);
-    setReload(!reload);
   };
 
   const moveDown = index => {
-    const duplicateArray = data;
+    let duplicateArray = [...data];
     duplicateArray.splice(index, 0, duplicateArray.splice(index + 1, 1)[0]);
-    setData(duplicateArray);
     saveData(duplicateArray);
-    setReload(!reload);
   };
 
-  const toggleSetting = index => {
-    let duplicateArray = data;
-    duplicateArray[index].status = !duplicateArray[index].status;
-    setData(duplicateArray);
+  const toggleSetting = rIndex => {
+    const duplicateArray = data.map((obj, index) => {
+      if (index === rIndex) {
+        return {...obj, status: !obj.status};
+      }
+      return obj;
+    });
     saveData(duplicateArray);
-    setReload(!reload);
   };
 
-  const saveData = async updateData => {
-    await AsyncStorage.setItem(`${componentkey}`, JSON.stringify(updateData));
+  const saveData = updateData => {
+    dispatch(userSetting(componentkey, updateData));
   };
 
   const RenderItem = ({item, index}) => {
@@ -91,7 +79,6 @@ const FunctionalityList = ({listItem, label, componentkey}) => {
       <Text style={styles.componentTitle}>{label}</Text>
       <FlatList
         data={data}
-        extraData={reload}
         keyExtractor={item => item.id}
         renderItem={RenderItem}
         ItemSeparatorComponent={() => <View style={styles.separator} />}

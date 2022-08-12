@@ -1,14 +1,16 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
 import imageConstants from '../../assets/images/login/urls';
 import theme from '../../assets/theme';
 import AppContainer from '../../components/Default/AppContainer';
 import InputBox from '../../components/Default/InputBox';
-import {AuthContext} from '../../routes/appStack';
+import {loginApi} from '../../redux/reducers/user/user.actions';
 import {heightToPixel as hp, widthToPixel as wp} from '../../utils/responsive';
 
 const Login = props => {
-  const {signIn} = React.useContext(AuthContext);
+  const dispatch = useDispatch();
+
   return (
     <AppContainer>
       <View style={styles.container}>
@@ -21,7 +23,7 @@ const Login = props => {
         </View>
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => signIn()}>
+          onPress={() => dispatch(loginApi())}>
           <Text style={{fontSize: theme.fontSize.s, color: '#FFF'}}>Login</Text>
         </TouchableOpacity>
       </View>
