@@ -3,7 +3,7 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 
 const ResponsiveContainer = ({containerStyle, children}) => {
   return (
-    <ScrollView>
+    <ScrollView nestedScrollEnabled={true}>
       <View style={[styles.container, containerStyle]}>{children}</View>
     </ScrollView>
   );

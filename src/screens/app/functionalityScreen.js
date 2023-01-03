@@ -7,17 +7,14 @@ import {widthToPixel as wp} from '../../utils/responsive';
 const FunctionalityScreen = () => {
   return (
     <ResponsiveContainer containerStyle={style.containerStyle}>
-      <FunctionalityList
-        label="Terminal Setting"
-        componentkey="terminal_setting"
-      />
+      <FunctionalityList label="Terminal Setting" componentkey="terminalData" />
       <FunctionalityList
         label="Payment Types Counter"
-        componentkey="payment_type"
+        componentkey="paymentType"
       />
       <FunctionalityList
         label="Sidebar Settings"
-        componentkey="sidebar_settings"
+        componentkey="sideBarSettings"
       />
     </ResponsiveContainer>
   );

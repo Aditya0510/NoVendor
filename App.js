@@ -30,5 +30,5 @@ const App: () => Node = () => {
     </SafeAreaView>
   );
 };
-
+ 
 export default App;

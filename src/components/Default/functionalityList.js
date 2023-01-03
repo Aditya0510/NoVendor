@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {isTablet} from 'react-native-device-info';
 import {useDispatch, useSelector} from 'react-redux';
 import theme from '../../assets/theme';
@@ -77,12 +77,9 @@ const FunctionalityList = ({label, componentkey}) => {
         isTablet() && {maxWidth: '40%', flexGrow: 1},
       ]}>
       <Text style={styles.componentTitle}>{label}</Text>
-      <FlatList
-        data={data}
-        keyExtractor={item => item.id}
-        renderItem={RenderItem}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      {data?.map((item, index) => (
+        <RenderItem item={item} index={index} />
+      ))}
     </View>
   );
 };
